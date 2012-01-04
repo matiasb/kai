@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/matiasb/kai", 
+  "version": "0.1", 
+  "class": "Autocompleter", 
+  "module": "kai", 
+  "authors": "matiasb"
+}
