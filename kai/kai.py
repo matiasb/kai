@@ -23,7 +23,7 @@ class Autocompleter(plugin.Plugin):
     def initialize(self):
         """Ninja-ide plugin initializer."""
         self.editor_s = self.locator.get_service('editor')
-        tab_manager = self.editor_s.get_tab_manager()
+        tab_manager = self.editor_s._main.actualTab
 
         self.completer = DocumentCompleter()
         # to-do: make these configurable settings
@@ -71,7 +71,7 @@ class Autocompleter(plugin.Plugin):
         # HACK: decorator to avoid editor keypress when activating completion
         def check_completer_activation(completer, function):
             @wraps(function)
-            def _inner(widget, event):
+            def _inner(event):
                 if completer and completer.popup().isVisible():
                     if event.key() in (
                             QtCore.Qt.Key_Enter,
