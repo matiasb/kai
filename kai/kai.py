@@ -19,6 +19,8 @@ class DocumentCompleter(QtGui.QCompleter):
 
 class Autocompleter(plugin.Plugin):
     """Simple Autocompleter plugin."""
+    # end of word
+    eow = QtCore.QString("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=")
 
     def initialize(self):
         """Ninja-ide plugin initializer."""
@@ -114,7 +116,12 @@ class Autocompleter(plugin.Plugin):
         if editor is not None:
             tc = editor.textCursor()
             tc.select(QtGui.QTextCursor.WordUnderCursor)
-            return tc.selectedText()
+            prefix = tc.selectedText()
+            if prefix and self.eow.contains(prefix[0]):
+                tc.movePosition(QtGui.QTextCursor.WordLeft, n=2)
+                tc.select(QtGui.QTextCursor.WordUnderCursor)
+                prefix = tc.selectedText()
+            return prefix
         return None
 
     def key_press(self, event):
