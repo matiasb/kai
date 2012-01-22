@@ -111,13 +111,18 @@ class Autocompleter(plugin.Plugin):
     def text_under_cursor(self):
         """Return the word under the cursor for possible completion search."""
         editor = self.editor_s.get_editor()
-        tc = editor.textCursor()
-        tc.select(QtGui.QTextCursor.WordUnderCursor)
-        return tc.selectedText()
+        if editor is not None:
+            tc = editor.textCursor()
+            tc.select(QtGui.QTextCursor.WordUnderCursor)
+            return tc.selectedText()
+        return None
 
     def key_press(self, event):
         """Check for completer activation."""
         completionPrefix = self.text_under_cursor()
+
+        if completionPrefix is None:
+            return
 
         # to-do: make prefix length to show completer a setting
         if event.text().isEmpty() or completionPrefix.length() < 3:
