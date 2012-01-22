@@ -131,8 +131,12 @@ class Autocompleter(plugin.Plugin):
         if completionPrefix is None:
             return
 
+        is_shortcut = (event.modifiers() == QtCore.Qt.ControlModifier and
+                       event.key() == QtCore.Qt.Key_Space)
+
         # to-do: make prefix length to show completer a setting
-        if event.text().isEmpty() or completionPrefix.length() < 3:
+        should_hide = event.text().isEmpty() or completionPrefix.length() < 3
+        if not is_shortcut and should_hide:
             self.completer.popup().hide()
             return
         else:
