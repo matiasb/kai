@@ -9,12 +9,21 @@ from PyQt4.Qt import QObject
 from ninja_ide.core import plugin
 
 
+STYLES = """
+QListView {
+    border: 1px solid #1e1e1e;
+}
+"""
+
+
 class DocumentCompleter(QtGui.QCompleter):
     """StringList Simple Completer."""
 
     def __init__(self, parent=None):
         words = []
         QtGui.QCompleter.__init__(self, words, parent)
+        self.popup().setAlternatingRowColors(True)
+        self.popup().setStyleSheet(STYLES)
 
 
 class Autocompleter(plugin.Plugin):
