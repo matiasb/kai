@@ -158,6 +158,9 @@ class Autocompleter(plugin.Plugin):
                 self.completer.completionModel().index(0, 0))
 
         editor = self.editor_s.get_editor()
+        # HACK: need signal/hook for splits from ninja
+        if self.completer.widget() != editor:
+            self.completer.setWidget(editor)
         cr = editor.cursorRect()
         cr.setWidth(self.completer.popup().sizeHintForColumn(0)
             + self.completer.popup().verticalScrollBar().sizeHint().width())
