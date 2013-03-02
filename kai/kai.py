@@ -12,6 +12,9 @@ from ninja_ide.core import plugin
 STYLES = """
 QListView {
     border: 1px solid #1e1e1e;
+    alternate-background-color: #4d4949;
+    background: #5e5f5d;
+    color: white;
 }
 """
 
