@@ -29,7 +29,7 @@ class DocumentCompleter(QtGui.QCompleter):
 class Autocompleter(plugin.Plugin):
     """Simple Autocompleter plugin."""
     # end of word
-    eow = QtCore.QString("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=")
+    eow = "~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="
 
     def initialize(self):
         """Ninja-ide plugin initializer."""
@@ -112,11 +112,10 @@ class Autocompleter(plugin.Plugin):
         """Insert chosen completion."""
         editor = self.editor_s.get_editor()
         tc = editor.textCursor()
-        extra = (completion.length() -
-                 self.completer.completionPrefix().length())
+        extra = len(self.completer.completionPrefix())
         tc.movePosition(QtGui.QTextCursor.Left)
         tc.movePosition(QtGui.QTextCursor.EndOfWord)
-        tc.insertText(completion.right(extra))
+        tc.insertText(completion[extra:])
         editor.setTextCursor(tc)
 
     def text_under_cursor(self):
@@ -126,7 +125,7 @@ class Autocompleter(plugin.Plugin):
             tc = editor.textCursor()
             tc.select(QtGui.QTextCursor.WordUnderCursor)
             prefix = tc.selectedText()
-            if prefix and self.eow.contains(prefix[0]):
+            if prefix and prefix[0] in self.eow:
                 tc.movePosition(QtGui.QTextCursor.WordLeft, n=2)
                 tc.select(QtGui.QTextCursor.WordUnderCursor)
                 prefix = tc.selectedText()
@@ -144,7 +143,7 @@ class Autocompleter(plugin.Plugin):
                        event.key() == QtCore.Qt.Key_Space)
 
         # to-do: make prefix length to show completer a setting
-        should_hide = event.text().isEmpty() or completionPrefix.length() < 3
+        should_hide = not event.text() or len(completionPrefix) < 3
         if not is_shortcut and should_hide:
             self.completer.popup().hide()
             return
